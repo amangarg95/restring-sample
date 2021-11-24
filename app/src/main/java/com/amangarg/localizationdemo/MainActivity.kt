@@ -50,12 +50,11 @@ class MainActivity : BaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun updateStringsHashmap() {
-        getLocalStringJsonHashmap().forEach {
-            if (it.key == "en_text_greeting") {
-                englishStringsMap["text_greeting"] = it.value
-            } else {
-                spanishStringsMap["text_greeting"] = it.value
-            }
+        getLocalStringJsonHashmap("en").forEach {
+            englishStringsMap[it.key] = it.value
+        }
+        getLocalStringJsonHashmap("es").forEach {
+            spanishStringsMap[it.key] = it.value
         }
     }
 
@@ -76,10 +75,10 @@ class MainActivity : BaseActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    fun getLocalStringJsonHashmap(): HashMap<String, String> {
+    fun getLocalStringJsonHashmap(language: String): HashMap<String, String> {
         val listTypeJson: HashMap<String, String> = HashMap()
         try {
-            applicationContext.assets.open("localized_strings.json").use { inputStream ->
+            applicationContext.assets.open("$language.json").use { inputStream ->
                 val size: Int = inputStream.available()
                 val buffer = ByteArray(size)
                 inputStream.read(buffer)
